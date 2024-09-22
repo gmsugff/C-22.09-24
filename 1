@@ -1,0 +1,63 @@
+#include<iostream> 
+#include<memory> 
+using namespace std; 
+ template <class T> 
+class ArrayList { 
+public: 
+ ArrayList() :head(nullptr), tail(nullptr) {} 
+ 
+ void push_back( T value) { 
+  auto new_node = make_shared<Node>(value); 
+  if (!head) { 
+   head = new_node; 
+   tail = new_node; 
+   return; 
+  } 
+  tail->next = new_node; 
+  tail = new_node; 
+ } 
+ T& at(int index) { 
+  shared_ptr<Node> current = head; 
+  int i = 0; 
+  while (current != nullptr && i < index) { 
+   current = current->next; 
+   i++; 
+  } 
+  if (current == nullptr) { 
+   throw out_of_range("Index out of range"); 
+  } 
+  return *current->data; 
+ } 
+private: 
+ struct Node { 
+  shared_ptr<T> data; 
+  shared_ptr<Node> next; 
+  Node(const T& value) : data(make_shared<T>(value)), next(nullptr) {}; 
+ }; 
+ shared_ptr<Node> head; 
+ shared_ptr<Node> tail; 
+}; 
+int main() { 
+ Queue<int> queue; 
+ queue.enqueue(1); 
+ queue.enqueue(2); 
+ queue.enqueue(3); 
+ try { 
+  while (!queue.empty()) { 
+   cout << queue.dequeue() << " "; 
+  } 
+  cout << endl; 
+ } 
+ catch (const runtime_error& e) { 
+  cout << e.what() << "\n"; 
+ } 
+  
+ 
+ ArrayList<int> ar; 
+ ar.push_back(4); 
+ ar.push_back(5); 
+ ar.push_back(43); 
+ ar.push_back(41); 
+ 
+ cout<< ar.at(2); 
+} 
